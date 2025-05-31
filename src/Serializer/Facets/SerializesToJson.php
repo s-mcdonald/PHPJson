@@ -17,7 +17,7 @@ trait SerializesToJson
         $arrayToNormalize = [];
         foreach ($mapping as $propName) {
             if (property_exists($this, $propName)) {
-                $arrayToNormalize[$propName] = $this->$propName;
+                $arrayToNormalize[$propName] = $this->{$propName};
             }
         }
 
