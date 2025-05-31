@@ -82,7 +82,7 @@ final class Json
 
     public static function prettify(string $json): string
     {
-        return self::getJsonFormatter()->pretty($json);
+        return json_encode(json_decode($json, false), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 
     public static function uglify(string $json): string

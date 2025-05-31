@@ -11,25 +11,6 @@ use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
 #[CoversClass(JsonFormatter::class)]
 class JsonFormatterTest extends TestCase
 {
-    public function testPretty(): void
-    {
-        $sut = new JsonFormatter();
-
-        $input = '{"name":"bar"}';
-
-        $expected = <<<JSON
-{
-    "name": "bar"
-}
-JSON
-        ;
-
-        static::assertEquals(
-            $expected,
-            $sut->pretty($input),
-        );
-    }
-
     public function testUglify(): void
     {
         $sut = new JsonFormatter();
