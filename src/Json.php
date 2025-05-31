@@ -37,6 +37,11 @@ final class Json
         return (new ArrayToJsonEncoder())->encode($this->jsonProperties, JsonFormat::Compressed)->getBody();
     }
 
+    public function toArray(): array|false
+    {
+        return $this->jsonProperties;
+    }
+
     public function addProperty(string $key, mixed $value): self
     {
         $this->jsonProperties[$key] = $value;
@@ -119,11 +124,6 @@ final class Json
         $package = (new ArrayToJsonEncoder())->encode($decodedData);
 
         return $package->getBody();
-    }
-
-    public function toArray(): array|false
-    {
-        return $this->jsonProperties;
     }
 
     public static function convertToArray(string $json): array|false
