@@ -550,11 +550,30 @@ JSON
         static::assertEquals(new \stdClass(), $builder->toStdClass());
     }
 
-    public function testPush(): void
+    #[DataProvider('provideDataForTestPush')]
+    public function testPush(string $json, string $expected): void
     {
-        $json = '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}';
+        static::assertEquals($expected, Json::push($json, "foo", "foovalue"));
+    }
 
-        $expected = <<<JSON
+    public static function provideDataForTestPush(): \Generator
+    {
+        yield
+            'json1' => [
+            '{"key":"value"}',
+            <<<JSON
+{
+    "key": "value",
+    "newKey": "newValue"
+}
+JSON
+            ];
+
+
+        yield
+        'json1' => [
+            '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}',
+            <<<JSON
 {
     "name": "bar",
     "age": 19,
@@ -569,9 +588,19 @@ JSON
     ],
     "foo": "foovalue"
 }
-JSON;
+JSON,
+        ];
+    }
 
-        static::assertEquals($expected, Json::push($json, "foo", "foovalue"));
+    public function testPushWithInvalidJson(): void
+    {
+        $json = '{"key":value"}';
+        $key = "newKey";
+        $item = "newValue";
+
+        static::assertFalse(
+            Json::push($json, $key, $item),
+        );
     }
 
     public function testAddProperty(): void
@@ -605,6 +634,32 @@ JSON;
 JSON;
 
         static::assertEquals($expected, Json::remove($json, "children"));
+    }
+
+    public function testRemoveWithValidData(): void
+    {
+        $json = '{"key":"value","toRemove":"value"}';
+        $property = "toRemove";
+        $expectedJson = <<<JSON
+{
+    "key": "value"
+}
+JSON
+        ;
+
+        static::assertEquals(
+            $expectedJson,
+            Json::remove($json, $property)
+        );
+    }
+
+    public function testRemoveWithInvalidJson(): void
+    {
+        $json = '{"key":value"}';
+
+        static::assertFalse(
+            Json::remove($json, 'key'),
+        );
     }
 
     public function testCreateFromFile(): void

@@ -13,12 +13,9 @@ use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
 use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
 use SamMcDonald\Json\Serializer\JsonSerializer;
-use SamMcDonald\Json\Serializer\Transformer\JsonUtilities;
 
 final class Json
 {
-    private static JsonUtilities|null $jsonUtilities = null;
-
     private static JsonFormatter|null $jsonFormatter = null;
 
     private static JsonSerializer|null $jsonSerializer = null;
@@ -96,12 +93,32 @@ final class Json
 
     public static function push(string $json, string $key, mixed $item): string|false
     {
-        return self::getJsonUtilities()->push($json, $key, $item);
+        $package = (new JsonToArrayDecoder())->decode($json);
+        if (false === $package->isValid()) {
+            return false;
+        }
+        $decodedData = $package->getBody();
+        $decodedData[$key] = $item;
+
+        $package = (new ArrayToJsonEncoder())->encode($decodedData);
+
+        return $package->getBody();
     }
 
     public static function remove(string $json, string $property): string|false
     {
-        return self::getJsonUtilities()->remove($json, $property);
+        $package = (new JsonToArrayDecoder())->decode($json);
+        if (false === $package->isValid()) {
+            return false;
+        }
+
+        $decodedData = $package->getBody();
+
+        unset($decodedData[$property]);
+
+        $package = (new ArrayToJsonEncoder())->encode($decodedData);
+
+        return $package->getBody();
     }
 
     public function toArray(): array|false
@@ -142,15 +159,6 @@ final class Json
         }
 
         return self::$jsonSerializer;
-    }
-
-    private static function getJsonUtilities(): JsonUtilities
-    {
-        if (null === self::$jsonUtilities) {
-            self::$jsonUtilities = new JsonUtilities();
-        }
-
-        return self::$jsonUtilities;
     }
 
     private static function getJsonFormatter(): JsonFormatter
