@@ -36,6 +36,7 @@ use SamMcDonald\Json\Tests\Fixtures\Enums\MyEnum;
 #[UsesClass(JsonBuilder::class)]
 #[UsesClass(JsonFormatter::class)]
 #[UsesClass(JsonUtilities::class)]
+
 class JsonTest extends TestCase
 {
     public function testForbiddenConstruction(): void

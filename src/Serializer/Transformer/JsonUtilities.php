@@ -13,11 +13,6 @@ use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
  */
 class JsonUtilities
 {
-    public function prettify(string $json): string
-    {
-        return (new JsonFormatter())->pretty($json);
-    }
-
     public function uglify(string $json): string
     {
         return (new JsonFormatter())->ugly($json);
