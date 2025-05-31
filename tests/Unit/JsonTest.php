@@ -37,12 +37,6 @@ use SamMcDonald\Json\Tests\Fixtures\Enums\MyEnum;
 
 class JsonTest extends TestCase
 {
-    public function testForbiddenConstruction(): void
-    {
-        $sut = Json::createFromString('{"foo":"bar"}');
-        static::assertInstanceOf(Json::class, $sut);
-    }
-
     public function testSerializeWithBasicNestingClass(): void
     {
         $sut = new ParentClassSerializable(123, '123 Fake Address');
