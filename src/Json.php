@@ -125,7 +125,7 @@ final class Json
         return new ArrayIterator($decoded->getBody());
     }
 
-    private static function getJsonSerializer(): JsonSerializer
+    public static function getJsonSerializer(): JsonSerializer
     {
         if (null === self::$jsonSerializer) {
             self::$jsonSerializer = new JsonSerializer();
