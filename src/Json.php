@@ -91,7 +91,7 @@ final class Json
 
     public static function isValid(string $json): bool
     {
-        return self::getJsonUtilities()->isValid($json);
+        return (new JsonToArrayDecoder())->decode($json)->isValid();
     }
 
     public static function push(string $json, string $key, mixed $item): string|false

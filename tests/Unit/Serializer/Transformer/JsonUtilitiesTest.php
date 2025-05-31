@@ -11,24 +11,6 @@ use SamMcDonald\Json\Serializer\Transformer\JsonUtilities;
 #[CoversClass(JsonUtilities::class)]
 class JsonUtilitiesTest extends TestCase
 {
-    public function testIsValidWithTrue(): void
-    {
-        $json = '{"key":"value"}';
-
-        static::assertTrue(
-            (new JsonUtilities())->isValid($json)
-        );
-    }
-
-    public function testIsValidWithFalse(): void
-    {
-        $json = '{"key":"value"';
-
-        static::assertFalse(
-            (new JsonUtilities())->isValid($json)
-        );
-    }
-
     public function testPush(): void
     {
         $json = '{"key":"value"}';
