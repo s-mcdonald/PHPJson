@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace SamMcDonald\Json;
 
 use InvalidArgumentException;
-
 use SamMcDonald\Json\Exceptions\JsonBuilderException;
 use SamMcDonald\Json\Serializer\Encoding\Components\JsonToStdClassDecoder;
 use SamMcDonald\Json\Serializer\Exceptions\JsonException;
+use SamMcDonald\Json\Serializer\JsonSerializerInterface;
 use stdClass;
 use Throwable;
 
 final class JsonBuilder
 {
     private array $jsonProperties = [];
+
+    public function __construct(
+        private JsonSerializerInterface $serializer,
+    ) {
+    }
 
     public function __toString(): string
     {
@@ -32,13 +37,13 @@ final class JsonBuilder
         return $this->addProperty($prop, null);
     }
 
-    public static function createFromJson(string $json): self
+    public static function createFromJson(string $json, JsonSerializerInterface $serializer): self
     {
         if (false === Json::isValid($json)) {
             throw new JsonException('Invalid source Json');
         }
 
-        $builder = new self();
+        $builder = new self($serializer);
         foreach (Json::toArray($json) as $prop => $value) {
             $builder->addProperty($prop, $value);
         }

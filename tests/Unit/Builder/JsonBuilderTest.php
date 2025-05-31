@@ -7,8 +7,10 @@ namespace SamMcDonald\Json\Tests\Unit\Builder;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SamMcDonald\Json\Json;
 use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Exceptions\JsonException;
+use SamMcDonald\Json\Serializer\JsonSerializer;
 
 #[CoversClass(JsonBuilder::class)]
 class JsonBuilderTest extends TestCase
@@ -17,7 +19,7 @@ class JsonBuilderTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Recursion error: Does not support itself');
-        $jsonBuilder = new JsonBuilder();
+        $jsonBuilder = Json::createJsonBuilder();
         $data = [];
         $data['self'] = $jsonBuilder;
         $jsonBuilder->addProperty('self', $data);
@@ -42,7 +44,7 @@ JSON;
 }
 JSON;
 
-        $sut = JsonBuilder::createFromJson($original);
+        $sut = JsonBuilder::createFromJson($original, Json::getJsonSerializer());
 
         self::assertEquals(
             $expected,
@@ -59,7 +61,7 @@ JSON;
 JSON;
         self::assertEquals(
             $expected,
-            (string)JsonBuilder::createFromJson('{"foo": null}')
+            (string)JsonBuilder::createFromJson('{"foo": null}', Json::getJsonSerializer())
         );
     }
 
@@ -67,12 +69,12 @@ JSON;
     {
         $this->expectException(JsonException::class);
 
-        JsonBuilder::createFromJson('{"foo" null}');
+        JsonBuilder::createFromJson('{"foo" null}', Json::getJsonSerializer());
     }
 
     public function testAddNullProperty(): void
     {
-        $sut = $this->createBuilder();
+        $sut = Json::createJsonBuilder();
         $expected = <<<JSON
 {
     "foo": null
@@ -89,7 +91,7 @@ JSON;
 
     public function testAddObjectProperty(): void
     {
-        $sut = $this->createBuilder();
+        $sut = Json::createJsonBuilder();
         $expected = <<<JSON
 {
     "foo": {
@@ -100,7 +102,7 @@ JSON;
 
         $sut->addProperty(
             "foo",
-            $this->createBuilder()->addProperty("abc", "def")
+            Json::createJsonBuilder()->addProperty("abc", "def")
         );
 
         self::assertEquals(
@@ -111,7 +113,7 @@ JSON;
 
     public function testAddArrayProperty(): void
     {
-        $sut = $this->createBuilder();
+        $sut = Json::createJsonBuilder();
 
         $expected = <<<JSON
 {
@@ -131,7 +133,7 @@ JSON;
 
     public function testAddStringProperty(): void
     {
-        $sut = $this->createBuilder();
+        $sut = Json::createJsonBuilder();
 
         $expected = <<<JSON
 {
@@ -149,7 +151,7 @@ JSON;
 
     public function testAddBooleanProperty(): void
     {
-        $sut = $this->createBuilder();
+        $sut = Json::createJsonBuilder();
 
         $expected = <<<JSON
 {
@@ -167,7 +169,7 @@ JSON;
 
     public function testAddNumericProperty(): void
     {
-        $sut = $this->createBuilder();
+        $sut = Json::createJsonBuilder();
 
         $expected = <<<JSON
 {
@@ -185,11 +187,11 @@ JSON;
 
     public function testToArrayReturnsCorrectArray(): void
     {
-        $builder = new JsonBuilder();
+        $sut = Json::createJsonBuilder();
 
-        $builder->addProperty('name', 'John Doe');
-        $builder->addProperty('age', 30);
-        $builder->addProperty('isActive', true);
+        $sut->addProperty('name', 'John Doe');
+        $sut->addProperty('age', 30);
+        $sut->addProperty('isActive', true);
 
         $expected = [
             'name' => 'John Doe',
@@ -197,12 +199,12 @@ JSON;
             'isActive' => true,
         ];
 
-        static::assertSame($expected, $builder->toArray());
+        static::assertSame($expected, $sut->toArray());
     }
 
     public function testBuild(): void
     {
-        $sut = $this->createBuilder();
+        $sut = Json::createJsonBuilder();
 
         $expected = <<<JSON
 {

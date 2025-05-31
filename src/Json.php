@@ -76,7 +76,7 @@ final class Json
 
     public static function createJsonBuilder(): JsonBuilder
     {
-        return new JsonBuilder();
+        return new JsonBuilder(self::getJsonSerializer());
     }
 
     public static function prettify(string $json): string

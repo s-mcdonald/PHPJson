@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SamMcDonald\Json\Serializer\Normalization\Normalizers;
 
 use ReflectionProperty;
+use SamMcDonald\Json\Json;
 use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Context\Context;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Context\ContextBuilder;
@@ -19,7 +20,7 @@ final class EntityNormalizer extends AbstractClassNormalizer
 {
     protected function transferToJsonBuilder(object $propertyValue): JsonBuilder
     {
-        $jsonBuilder = new JsonBuilder();
+        $jsonBuilder = Json::createJsonBuilder();
         $contextBuilder = new ContextBuilder($this->propertyReader);
 
         foreach ($this->getReflectionProperties($propertyValue) as $prop) {
