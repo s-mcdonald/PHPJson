@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SamMcDonald\Json\Serializer;
 
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
+use SamMcDonald\Json\JsonFormat;
 
 interface JsonSerializerInterface
 {

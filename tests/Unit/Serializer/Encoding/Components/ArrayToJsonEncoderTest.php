@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SamMcDonald\Json\Tests\Unit\Serializer\Encoding\Components;
 
 use PHPUnit\Framework\TestCase;
+use SamMcDonald\Json\JsonFormat;
 use SamMcDonald\Json\Serializer\Encoding\Components\ArrayToJsonEncoder;
 use SamMcDonald\Json\Serializer\Encoding\JsonEncodingResult;
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 
 class ArrayToJsonEncoderTest extends TestCase
 {

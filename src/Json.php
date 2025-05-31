@@ -9,7 +9,6 @@ use SamMcDonald\Json\Loaders\LocalFileLoader;
 use SamMcDonald\Json\Loaders\UrlLoader;
 use SamMcDonald\Json\Serializer\Encoding\Components\ArrayToJsonEncoder;
 use SamMcDonald\Json\Serializer\Encoding\Components\JsonToArrayDecoder;
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
 use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
 use SamMcDonald\Json\Serializer\JsonSerializer;

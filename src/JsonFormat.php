@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SamMcDonald\Json\Serializer\Enums;
+namespace SamMcDonald\Json;
 
 enum JsonFormat: string
 {

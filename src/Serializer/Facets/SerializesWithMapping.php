@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SamMcDonald\Json\Serializer\Facets;
 
+use SamMcDonald\Json\JsonFormat;
 use SamMcDonald\Json\Serializer\Attributes\AttributeReader\JsonPropertyReader;
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 use SamMcDonald\Json\Serializer\JsonSerializer;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\ArrayNormalizer;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\EntityNormalizer;
