@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Normalization\Normalizers\Context;
 
 use ReflectionMethod;
 use ReflectionProperty;
-use SamMcDonald\Json\Builder\JsonBuilder;
+use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
 readonly class Context

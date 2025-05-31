@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SamMcDonald\Json\Serializer\Encoding;
 
 use Exception;
+use SamMcDonald\Json\JsonFormat;
 use SamMcDonald\Json\Serializer\Encoding\Components\Flags\EncodeFlags;
 use SamMcDonald\Json\Serializer\Encoding\Components\Flags\EncodeOptions;
 use SamMcDonald\Json\Serializer\Encoding\Contracts\EncoderInterface;
 use SamMcDonald\Json\Serializer\Encoding\Contracts\EncodingResultInterface;
 use SamMcDonald\Json\Serializer\Encoding\Validator\Contracts\JsonValidatorInterface;
 use SamMcDonald\Json\Serializer\Encoding\Validator\ValidationMessage;
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 use stdClass;
 
 class JsonEncoder implements EncoderInterface

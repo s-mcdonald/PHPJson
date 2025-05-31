@@ -9,15 +9,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use SamMcDonald\Json\Builder\JsonBuilder;
 use SamMcDonald\Json\Json;
-use SamMcDonald\Json\Loaders\UrlLoader;
+use SamMcDonald\Json\JsonBuilder;
+use SamMcDonald\Json\JsonFormat;
 use SamMcDonald\Json\Serializer\Attributes\JsonProperty;
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
-use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
 use SamMcDonald\Json\Serializer\JsonSerializer;
-use SamMcDonald\Json\Serializer\Transformer\JsonUtilities;
 use SamMcDonald\Json\Tests\Fixtures\Entities\ClassWithMethodAndConstructor;
 use SamMcDonald\Json\Tests\Fixtures\Entities\ClassWithPrivateStringProperty;
 use SamMcDonald\Json\Tests\Fixtures\Entities\ClassWithPublicStringProperty;
@@ -35,16 +32,9 @@ use SamMcDonald\Json\Tests\Fixtures\Enums\MyEnum;
 #[UsesClass(GoodChildObjectSerializable::class)]
 #[UsesClass(JsonSerializer::class)]
 #[UsesClass(JsonBuilder::class)]
-#[UsesClass(JsonFormatter::class)]
-#[UsesClass(JsonUtilities::class)]
+
 class JsonTest extends TestCase
 {
-    public function testForbiddenConstruction(): void
-    {
-        $sut = Json::createFromString('{"foo":"bar"}');
-        static::assertInstanceOf(Json::class, $sut);
-    }
-
     public function testSerializeWithBasicNestingClass(): void
     {
         $sut = new ParentClassSerializable(123, '123 Fake Address');
@@ -500,7 +490,26 @@ JSON
     {
         $json = '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}';
 
-        $array = Json::toArray($json);
+        $jsonObj = Json::createFromString($json);
+
+        $array = $jsonObj->toArray();
+
+        static::assertIsArray($array);
+        static::assertCount(4, $array);
+        static::assertEquals('bar', $array['name']);
+        static::assertEquals(19, $array['age']);
+        static::assertTrue($array['isActive']);
+        static::assertIsArray($array['children']);
+        static::assertCount(2, $array['children']);
+        static::assertEquals('child1', $array['children'][0]['name']);
+        static::assertEquals('child2', $array['children'][1]['name']);
+    }
+
+    public function testConvertToArray(): void
+    {
+        $json = '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}';
+
+        $array = Json::convertToArray($json);
 
         static::assertIsArray($array);
         static::assertCount(4, $array);
@@ -516,10 +525,10 @@ JSON
     /**
      * With malformed json string, false is expected to be returned
      */
-    public function testToArrayWithBadJson(): void
+    public function testConvertToArrayWithBadJson(): void
     {
         $json = '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}';
-        $array = Json::toArray($json);
+        $array = Json::convertToArray($json);
         static::assertFalse($array);
     }
 
@@ -531,11 +540,30 @@ JSON
         static::assertEquals(new \stdClass(), $builder->toStdClass());
     }
 
-    public function testPush(): void
+    #[DataProvider('provideDataForTestPush')]
+    public function testPush(string $json, string $expected): void
     {
-        $json = '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}';
+        static::assertEquals($expected, Json::push($json, "newKey", "newValue"));
+    }
 
-        $expected = <<<JSON
+    public static function provideDataForTestPush(): \Generator
+    {
+        yield
+            'json1' => [
+            '{"key":"value"}',
+            <<<JSON
+{
+    "key": "value",
+    "newKey": "newValue"
+}
+JSON
+            ];
+
+
+        yield
+        'json2' => [
+            '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}',
+            <<<JSON
 {
     "name": "bar",
     "age": 19,
@@ -548,11 +576,21 @@ JSON
             "name": "child2"
         }
     ],
-    "foo": "foovalue"
+    "newKey": "newValue"
 }
-JSON;
+JSON,
+        ];
+    }
 
-        static::assertEquals($expected, Json::push($json, "foo", "foovalue"));
+    public function testPushWithInvalidJson(): void
+    {
+        $json = '{"key":value"}';
+        $key = "newKey";
+        $item = "newValue";
+
+        static::assertFalse(
+            Json::push($json, $key, $item),
+        );
     }
 
     public function testAddProperty(): void
@@ -588,12 +626,54 @@ JSON;
         static::assertEquals($expected, Json::remove($json, "children"));
     }
 
+    public function testRemoveWithValidData(): void
+    {
+        $json = '{"key":"value","toRemove":"value"}';
+        $property = "toRemove";
+        $expectedJson = <<<JSON
+{
+    "key": "value"
+}
+JSON
+        ;
+
+        static::assertEquals(
+            $expectedJson,
+            Json::remove($json, $property)
+        );
+    }
+
+    public function testRemoveWithInvalidJson(): void
+    {
+        $json = '{"key":value"}';
+
+        static::assertFalse(
+            Json::remove($json, 'key'),
+        );
+    }
+
     public function testCreateFromFile(): void
     {
         $fileName = __DIR__ . '/../Fixtures/Files/basic.json';
         $json = Json::createFromFile($fileName);
 
         $expected = '{"foo":"bar","num":123,"double":123.567}';
+
+        static::assertEquals(
+            $expected,
+            $json->toUgly(),
+        );
+    }
+
+    public function testToUgly(): void
+    {
+        $json = "{
+    \"key\": \"value\"
+}";
+
+        $expected = '{"key":"value"}';
+
+        $json = Json::createFromString($json);
 
         static::assertEquals(
             $expected,

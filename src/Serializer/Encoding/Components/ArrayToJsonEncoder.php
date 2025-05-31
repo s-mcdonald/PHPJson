@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SamMcDonald\Json\Serializer\Encoding\Components;
 
 use Exception;
+use SamMcDonald\Json\JsonFormat;
 use SamMcDonald\Json\Serializer\Encoding\Components\Flags\EncodeFlags;
 use SamMcDonald\Json\Serializer\Encoding\Components\Flags\EncodeOptions;
 use SamMcDonald\Json\Serializer\Encoding\Contracts\ArrayEncoderInterface;
 use SamMcDonald\Json\Serializer\Encoding\Contracts\EncodingResultInterface;
 use SamMcDonald\Json\Serializer\Encoding\JsonEncodingResult;
 use SamMcDonald\Json\Serializer\Encoding\Validator\ValidationMessage;
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 
 class ArrayToJsonEncoder implements ArrayEncoderInterface
 {

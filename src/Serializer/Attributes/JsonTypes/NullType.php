@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
-class NullType extends JsonType
+final class NullType extends JsonType
 {
     public function getPhpType(): string
     {
@@ -18,7 +18,7 @@ class NullType extends JsonType
         return ['NULL', 'boolean'];
     }
 
-    final protected function cast($value): null
+    protected function cast($value): null
     {
         return null;
     }

@@ -6,7 +6,8 @@ namespace SamMcDonald\Json\Serializer\Normalization\Normalizers;
 
 use ReflectionMethod;
 use ReflectionProperty;
-use SamMcDonald\Json\Builder\JsonBuilder;
+use SamMcDonald\Json\Json;
+use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Attributes\JsonProperty;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Context\Context;
@@ -21,7 +22,8 @@ final class ObjectNormalizer extends AbstractClassNormalizer
 {
     protected function transferToJsonBuilder(object $propertyValue): JsonBuilder
     {
-        $jsonBuilder = new JsonBuilder();
+        //        $jsonBuilder = new JsonBuilder();
+        $jsonBuilder = Json::createJsonBuilder();
         $contextBuilder = new ContextBuilder($this->propertyReader);
 
         foreach ($this->getReflectionProperties($propertyValue) as $prop) {
@@ -45,7 +47,7 @@ final class ObjectNormalizer extends AbstractClassNormalizer
 
         if (count($context->getJsonPropertyAttributes()) > 1) {
             throw new JsonSerializableException(
-                sprintf(
+                \sprintf(
                     'Must have only 1 %s Attribute.',
                     JsonProperty::class,
                 ),
@@ -54,7 +56,7 @@ final class ObjectNormalizer extends AbstractClassNormalizer
 
         if (false === $context->getReflectionItem()->isInitialized($context->getOriginalObject())) {
             throw new JsonSerializableException(
-                sprintf(
+                \sprintf(
                     'Value not initialized: %s',
                     $context->getPropertyName(),
                 ),

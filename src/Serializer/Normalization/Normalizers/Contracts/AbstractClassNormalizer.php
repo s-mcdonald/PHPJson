@@ -11,7 +11,7 @@ use ReflectionException;
 use ReflectionMethod;
 use ReflectionObject;
 use ReflectionProperty;
-use SamMcDonald\Json\Builder\JsonBuilder;
+use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Attributes\AttributeReader\JsonPropertyReader;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Context\Context;
@@ -119,19 +119,15 @@ abstract class AbstractClassNormalizer extends AbstractNormalizer
         return $newArray;
     }
 
-    protected function normalizeEnum(object $propertyValue): stdClass
+    private function normalizeEnum(object $propertyValue): stdClass
     {
-        $reflectionClass = new ReflectionClass($propertyValue);
+        $reflectionEnum = new ReflectionEnum($propertyValue);
 
-        $value = $propertyValue->name;
-        if ((new ReflectionEnum($propertyValue))->isBacked()) {
-            $value = $propertyValue->value;
-        }
+        $value = $reflectionEnum->isBacked() ? $propertyValue->value : $propertyValue->name;
 
-        $builder = new JsonBuilder();
+        $obj = new stdClass();
+        $obj->{$reflectionEnum->getShortName()} = $value;
 
-        return $builder
-            ->addProperty($reflectionClass->getShortName(), $value)
-            ->toStdClass();
+        return $obj;
     }
 }

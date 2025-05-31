@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SamMcDonald\Json\Serializer\Normalization\Normalizers;
 
 use InvalidArgumentException;
-use SamMcDonald\Json\Builder\JsonBuilder;
+use JsonException;
+use SamMcDonald\Json\Json;
+use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Contracts\AbstractNormalizer;
 use stdClass;
@@ -19,24 +21,16 @@ class ArrayNormalizer extends AbstractNormalizer
     {
     }
 
+    /**
+     * @throws JsonException
+     */
     public function normalize(mixed $input): stdClass
     {
         if (false === is_array($input)) {
             throw new InvalidArgumentException('input must be an array.');
         }
 
-        return $this->transferToJsonBuilder($input)->toStdClass();
-    }
-
-    private function transferToJsonBuilder(array $array): JsonBuilder
-    {
-        $jsonBuilder = new JsonBuilder();
-
-        foreach ($array as $property => $value) {
-            $this->processProperty($property, $value, $jsonBuilder);
-        }
-
-        return $jsonBuilder;
+        return json_decode(json_encode($input, JSON_THROW_ON_ERROR), false, 512, JSON_THROW_ON_ERROR);
     }
 
     private function processProperty(string $property, $value, JsonBuilder $jsonBuilder): void
@@ -75,7 +69,7 @@ class ArrayNormalizer extends AbstractNormalizer
 
     private function mapObjectContents(object $propertyValue): JsonBuilder
     {
-        $jsonBuilder = new JsonBuilder();
+        $jsonBuilder = Json::createJsonBuilder();
 
         foreach ($propertyValue as $key => $value) {
             $this->processProperty($key, $value, $jsonBuilder);

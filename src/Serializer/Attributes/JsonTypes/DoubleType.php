@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
-class DoubleType extends JsonType
+final class DoubleType extends JsonType
 {
     public function getPhpType(): string
     {
@@ -18,7 +18,7 @@ class DoubleType extends JsonType
         return ['double', 'integer', 'string', 'boolean'];
     }
 
-    final protected function cast($value): float
+    protected function cast($value): float
     {
         return (float) $value;
     }

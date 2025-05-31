@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
-class ArrayType extends JsonType
+final class ArrayType extends JsonType
 {
     public function getPhpType(): string
     {
@@ -18,7 +18,7 @@ class ArrayType extends JsonType
         return ['array', 'object'];
     }
 
-    final protected function cast($value): array
+    protected function cast($value): array
     {
         return (array) $value;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SamMcDonald\Json\Loaders;
+namespace SamMcDonald\Json\Loaders\Contracts;
 
 interface LoaderInterface
 {

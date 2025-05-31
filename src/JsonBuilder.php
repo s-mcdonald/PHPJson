@@ -2,25 +2,53 @@
 
 declare(strict_types=1);
 
-namespace SamMcDonald\Json\Builder;
+namespace SamMcDonald\Json;
 
-use Exception;
 use InvalidArgumentException;
+use SamMcDonald\Json\Exceptions\JsonBuilderException;
 use SamMcDonald\Json\Serializer\Encoding\Components\JsonToStdClassDecoder;
 use SamMcDonald\Json\Serializer\Exceptions\JsonException;
+use SamMcDonald\Json\Serializer\JsonSerializerInterface;
 use stdClass;
+use Throwable;
 
-abstract class AbstractJsonBuilder
+final class JsonBuilder
 {
     private array $jsonProperties = [];
+
+    public function __construct(
+        private JsonSerializerInterface $serializer,
+    ) {
+    }
 
     public function __toString(): string
     {
         try {
             return json_encode($this->jsonProperties, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
-        } catch (Exception $e) {
-            throw new JsonException($e->getMessage());
+        } catch (Throwable $t) {
+            throw JsonBuilderException::createWithMessage($t->getMessage());
         }
+    }
+
+    public function addNullProperty(string $prop): self
+    {
+        self::assertPropertyName($prop);
+
+        return $this->addProperty($prop, null);
+    }
+
+    public static function createFromJson(string $json, JsonSerializerInterface $serializer): self
+    {
+        if (false === Json::isValid($json)) {
+            throw new JsonException('Invalid source Json');
+        }
+
+        $builder = new self($serializer);
+        foreach (Json::convertToArray($json) as $prop => $value) {
+            $builder->addProperty($prop, $value);
+        }
+
+        return $builder;
     }
 
     public function addProperty(string $prop, mixed $value): self
@@ -34,8 +62,8 @@ abstract class AbstractJsonBuilder
     {
         try {
             return (new JsonToStdClassDecoder())->decode((string) $this)->getBody();
-        } catch (Exception $e) {
-            throw new JsonException($e->getMessage());
+        } catch (Throwable $t) {
+            throw JsonBuilderException::createWithMessage($t->getMessage());
         }
     }
 
@@ -43,8 +71,8 @@ abstract class AbstractJsonBuilder
     {
         try {
             return json_decode((string) $this, true, 512, JSON_THROW_ON_ERROR);
-        } catch (Exception $e) {
-            throw new JsonException($e->getMessage());
+        } catch (Throwable $t) {
+            throw JsonBuilderException::createWithMessage($t->getMessage());
         }
     }
 
@@ -81,7 +109,7 @@ abstract class AbstractJsonBuilder
             throw new InvalidArgumentException('Does not support Object types.');
         }
 
-        return match (gettype($value)) {
+        return match (\gettype($value)) {
             'array', 'string', 'double', 'integer', 'boolean', 'NULL' => $value,
             default => throw new InvalidArgumentException('Invalid value type - Received : ' . gettype($value)),
         };

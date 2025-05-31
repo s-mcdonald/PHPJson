@@ -5,30 +5,22 @@ declare(strict_types=1);
 namespace SamMcDonald\Json;
 
 use ArrayIterator;
-use SamMcDonald\Json\Builder\JsonBuilder;
 use SamMcDonald\Json\Loaders\LocalFileLoader;
 use SamMcDonald\Json\Loaders\UrlLoader;
 use SamMcDonald\Json\Serializer\Encoding\Components\ArrayToJsonEncoder;
 use SamMcDonald\Json\Serializer\Encoding\Components\JsonToArrayDecoder;
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
-use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
 use SamMcDonald\Json\Serializer\JsonSerializer;
-use SamMcDonald\Json\Serializer\Transformer\JsonUtilities;
 
 final class Json
 {
-    private static JsonUtilities|null $jsonUtilities = null;
-
-    private static JsonFormatter|null $jsonFormatter = null;
-
     private static JsonSerializer|null $jsonSerializer = null;
 
     private array $jsonProperties;
 
     private function __construct(string $json)
     {
-        $this->jsonProperties = self::toArray($json);
+        $this->jsonProperties = self::convertToArray($json);
     }
 
     public function toPretty(): string
@@ -38,7 +30,12 @@ final class Json
 
     public function toUgly(): string
     {
-        return self::getJsonFormatter()->ugly((new ArrayToJsonEncoder())->encode($this->jsonProperties)->getBody());
+        return (new ArrayToJsonEncoder())->encode($this->jsonProperties, JsonFormat::Compressed)->getBody();
+    }
+
+    public function toArray(): array|false
+    {
+        return $this->jsonProperties;
     }
 
     public function addProperty(string $key, mixed $value): self
@@ -77,37 +74,62 @@ final class Json
 
     public static function createJsonBuilder(): JsonBuilder
     {
-        return new JsonBuilder();
+        return new JsonBuilder(self::getJsonSerializer());
     }
 
     public static function prettify(string $json): string
     {
-        return self::getJsonFormatter()->pretty($json);
+        return json_encode(json_decode($json, false), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 
     public static function uglify(string $json): string
     {
-        return self::getJsonFormatter()->ugly($json);
+        return json_encode(json_decode($json, false), JSON_THROW_ON_ERROR);
     }
 
     public static function isValid(string $json): bool
     {
-        return self::getJsonUtilities()->isValid($json);
+        return (new JsonToArrayDecoder())->decode($json)->isValid();
     }
 
     public static function push(string $json, string $key, mixed $item): string|false
     {
-        return self::getJsonUtilities()->push($json, $key, $item);
+        $package = (new JsonToArrayDecoder())->decode($json);
+        if (false === $package->isValid()) {
+            return false;
+        }
+        $decodedData = $package->getBody();
+        $decodedData[$key] = $item;
+
+        $package = (new ArrayToJsonEncoder())->encode($decodedData);
+
+        return $package->getBody();
     }
 
     public static function remove(string $json, string $property): string|false
     {
-        return self::getJsonUtilities()->remove($json, $property);
+        $package = (new JsonToArrayDecoder())->decode($json);
+        if (false === $package->isValid()) {
+            return false;
+        }
+
+        $decodedData = $package->getBody();
+
+        unset($decodedData[$property]);
+
+        $package = (new ArrayToJsonEncoder())->encode($decodedData);
+
+        return $package->getBody();
     }
 
-    public static function toArray(string $json): array|false
+    public static function convertToArray(string $json): array|false
     {
-        return self::getJsonUtilities()->toArray($json);
+        $package = (new JsonToArrayDecoder())->decode($json);
+        if ($package->isValid()) {
+            return $package->getBody();
+        }
+
+        return false;
     }
 
     public static function validate(string $json): bool
@@ -126,30 +148,12 @@ final class Json
         return new ArrayIterator($decoded->getBody());
     }
 
-    private static function getJsonSerializer(): JsonSerializer
+    public static function getJsonSerializer(): JsonSerializer
     {
         if (null === self::$jsonSerializer) {
             self::$jsonSerializer = new JsonSerializer();
         }
 
         return self::$jsonSerializer;
-    }
-
-    private static function getJsonUtilities(): JsonUtilities
-    {
-        if (null === self::$jsonUtilities) {
-            self::$jsonUtilities = new JsonUtilities();
-        }
-
-        return self::$jsonUtilities;
-    }
-
-    private static function getJsonFormatter(): JsonFormatter
-    {
-        if (null === self::$jsonFormatter) {
-            self::$jsonFormatter = new JsonFormatter();
-        }
-
-        return self::$jsonFormatter;
     }
 }

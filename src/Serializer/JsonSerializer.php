@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SamMcDonald\Json\Serializer;
 
+use SamMcDonald\Json\JsonFormat;
 use SamMcDonald\Json\Serializer\Attributes\AttributeReader\JsonPropertyReader;
 use SamMcDonald\Json\Serializer\Encoding\Components\Flags\EncodeFlags;
 use SamMcDonald\Json\Serializer\Encoding\Components\Flags\EncodeOptions;
@@ -12,11 +13,10 @@ use SamMcDonald\Json\Serializer\Encoding\Contracts\EncoderInterface;
 use SamMcDonald\Json\Serializer\Encoding\JsonDecoder;
 use SamMcDonald\Json\Serializer\Encoding\JsonEncoder;
 use SamMcDonald\Json\Serializer\Encoding\Validator\JsonValidator;
-use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Contracts\NormalizerInterface;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\ObjectNormalizer;
 
-class JsonSerializer
+class JsonSerializer implements JsonSerializerInterface
 {
     public function __construct(
         private EncoderInterface|null $encoder = null,

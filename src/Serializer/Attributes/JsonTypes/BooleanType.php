@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
-class BooleanType extends JsonType
+final class BooleanType extends JsonType
 {
     public function getPhpType(): string
     {
@@ -18,7 +18,7 @@ class BooleanType extends JsonType
         return ['boolean', 'integer', 'string', 'NULL'];
     }
 
-    final protected function cast($value): bool
+    protected function cast($value): bool
     {
         return (bool) $value;
     }
