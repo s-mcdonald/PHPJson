@@ -2,19 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SamMcDonald\Json\Serializer\Transformers;
+namespace SamMcDonald\Json\Transformers;
 
 use RuntimeException;
 use SamMcDonald\Json\Serializer\Encoding\Contracts\DecoderInterface;
-use SamMcDonald\Json\Serializer\Transformers\Configuration\YamlConfiguration;
-use SamMcDonald\Json\Serializer\Transformers\Contracts\TransformerInterface;
+use SamMcDonald\Json\Serializer\Encoding\Contracts\EncoderInterface;
+use SamMcDonald\Json\Transformers\Configuration\YamlConfiguration;
+use SamMcDonald\Json\Transformers\Contracts\TransformerInterface;
 
 /**
  * @experimental
  */
-final readonly class JsonToYamlTransformer implements TransformerInterface
+final readonly class ArrayToYamlTransformer implements TransformerInterface
 {
     public function __construct(
+        private EncoderInterface $jsonEncoder,
         private DecoderInterface $jsonDecoder,
         private YamlConfiguration $configuration,
     ) {
@@ -22,9 +24,20 @@ final readonly class JsonToYamlTransformer implements TransformerInterface
 
     public function transform(mixed $data): string
     {
-        assert(is_string($data));
+        assert(is_array($data));
 
-        $decodedPacket = $this->jsonDecoder->decode($data);
+        $encodedPacket = $this->jsonEncoder->encode((object) $data);
+
+        if (false === $encodedPacket->isValid()) {
+            throw new RuntimeException('Failed to encode array to json.');
+        }
+
+        return $this->jsonToYaml($encodedPacket->getBody());
+    }
+
+    private function jsonToYaml(string $json): string
+    {
+        $decodedPacket = $this->jsonDecoder->decode($json);
 
         if (false === $decodedPacket->isValid()) {
             throw new RuntimeException('Failed to decode json to array.');

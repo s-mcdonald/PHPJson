@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SamMcDonald\Json\Serializer\Transformers\Contracts;
+namespace SamMcDonald\Json\Transformers\Contracts;
 
 interface TransformerInterface
 {

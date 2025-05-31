@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SamMcDonald\Json\Serializer\Transformers\Configuration;
+namespace SamMcDonald\Json\Transformers\Configuration;
 
 use InvalidArgumentException;
 
