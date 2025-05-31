@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SamMcDonald\Json\Builder;
+namespace SamMcDonald\Json;
 
 use InvalidArgumentException;
-use SamMcDonald\Json\Builder\Exceptions\JsonBuilderException;
-use SamMcDonald\Json\Json;
+
+use SamMcDonald\Json\Exceptions\JsonBuilderException;
 use SamMcDonald\Json\Serializer\Encoding\Components\JsonToStdClassDecoder;
 use SamMcDonald\Json\Serializer\Exceptions\JsonException;
 use stdClass;
@@ -104,7 +104,7 @@ final class JsonBuilder
             throw new InvalidArgumentException('Does not support Object types.');
         }
 
-        return match (gettype($value)) {
+        return match (\gettype($value)) {
             'array', 'string', 'double', 'integer', 'boolean', 'NULL' => $value,
             default => throw new InvalidArgumentException('Invalid value type - Received : ' . gettype($value)),
         };

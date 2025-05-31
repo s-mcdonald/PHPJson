@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SamMcDonald\Json\Serializer\Normalization\Normalizers;
 
 use InvalidArgumentException;
-use SamMcDonald\Json\Builder\JsonBuilder;
+use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Contracts\AbstractNormalizer;
 use stdClass;

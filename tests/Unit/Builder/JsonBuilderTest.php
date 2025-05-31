@@ -7,12 +7,10 @@ namespace SamMcDonald\Json\Tests\Unit\Builder;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use SamMcDonald\Json\Builder\AbstractJsonBuilder;
-use SamMcDonald\Json\Builder\JsonBuilder;
+use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Exceptions\JsonException;
 
 #[CoversClass(JsonBuilder::class)]
-#[CoversClass(AbstractJsonBuilder::class)]
 class JsonBuilderTest extends TestCase
 {
     public function testJsonEncodeThrowsJsonException(): void

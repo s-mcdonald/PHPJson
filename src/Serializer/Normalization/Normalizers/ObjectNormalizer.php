@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Normalization\Normalizers;
 
 use ReflectionMethod;
 use ReflectionProperty;
-use SamMcDonald\Json\Builder\JsonBuilder;
+use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Attributes\JsonProperty;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Context\Context;

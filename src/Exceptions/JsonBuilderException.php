@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SamMcDonald\Json\Builder\Exceptions;
+namespace SamMcDonald\Json\Exceptions;
 
 use RuntimeException;
 

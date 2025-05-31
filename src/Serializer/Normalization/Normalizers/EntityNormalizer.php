@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SamMcDonald\Json\Serializer\Normalization\Normalizers;
 
 use ReflectionProperty;
-use SamMcDonald\Json\Builder\JsonBuilder;
+use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Context\Context;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Context\ContextBuilder;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Contracts\AbstractClassNormalizer;

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SamMcDonald\Json;
 
 use ArrayIterator;
-use SamMcDonald\Json\Builder\JsonBuilder;
 use SamMcDonald\Json\Loaders\LocalFileLoader;
 use SamMcDonald\Json\Loaders\UrlLoader;
 use SamMcDonald\Json\Serializer\Encoding\Components\ArrayToJsonEncoder;
