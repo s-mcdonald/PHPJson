@@ -16,7 +16,7 @@ use SamMcDonald\Json\Serializer\Enums\JsonFormat;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\Contracts\NormalizerInterface;
 use SamMcDonald\Json\Serializer\Normalization\Normalizers\ObjectNormalizer;
 
-class JsonSerializer
+class JsonSerializer implements JsonSerializerInterface
 {
     public function __construct(
         private EncoderInterface|null $encoder = null,
