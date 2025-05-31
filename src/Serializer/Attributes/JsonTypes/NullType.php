@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
-class NullType extends JsonType
+final class NullType extends JsonType
 {
     public function getPhpType(): string
     {

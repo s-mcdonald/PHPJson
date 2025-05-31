@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
-class IntegerType extends JsonType
+final class IntegerType extends JsonType
 {
     public function getPhpType(): string
     {

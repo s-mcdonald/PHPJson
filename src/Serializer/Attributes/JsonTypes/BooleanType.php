@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
-class BooleanType extends JsonType
+final class BooleanType extends JsonType
 {
     public function getPhpType(): string
     {

@@ -6,7 +6,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 
-class DoubleType extends JsonType
+final class DoubleType extends JsonType
 {
     public function getPhpType(): string
     {

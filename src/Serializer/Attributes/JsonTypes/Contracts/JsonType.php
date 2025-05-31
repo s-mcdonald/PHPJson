@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts;
 
-/**
- * JsonTypes will only work with the ObjectNormalizer.
- * However you can use them as standalone
- * objects for casting as needed.
- */
 abstract class JsonType
 {
     protected const SYSTEM_TYPE_MAP = [

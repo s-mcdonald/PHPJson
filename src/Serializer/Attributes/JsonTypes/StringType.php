@@ -7,7 +7,7 @@ namespace SamMcDonald\Json\Serializer\Attributes\JsonTypes;
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\JsonType;
 use SamMcDonald\Json\Serializer\Attributes\JsonTypes\Contracts\TypeCasting;
 
-class StringType extends JsonType implements TypeCasting
+final class StringType extends JsonType implements TypeCasting
 {
     public function getPhpType(): string
     {
