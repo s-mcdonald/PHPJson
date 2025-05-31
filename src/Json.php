@@ -10,13 +10,10 @@ use SamMcDonald\Json\Loaders\UrlLoader;
 use SamMcDonald\Json\Serializer\Encoding\Components\ArrayToJsonEncoder;
 use SamMcDonald\Json\Serializer\Encoding\Components\JsonToArrayDecoder;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
-use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
 use SamMcDonald\Json\Serializer\JsonSerializer;
 
 final class Json
 {
-    private static JsonFormatter|null $jsonFormatter = null;
-
     private static JsonSerializer|null $jsonSerializer = null;
 
     private array $jsonProperties;
@@ -87,7 +84,7 @@ final class Json
 
     public static function uglify(string $json): string
     {
-        return self::getJsonFormatter()->ugly($json);
+        return json_encode(json_decode($json, false), JSON_THROW_ON_ERROR);
     }
 
     public static function isValid(string $json): bool
@@ -158,14 +155,5 @@ final class Json
         }
 
         return self::$jsonSerializer;
-    }
-
-    private static function getJsonFormatter(): JsonFormatter
-    {
-        if (null === self::$jsonFormatter) {
-            self::$jsonFormatter = new JsonFormatter();
-        }
-
-        return self::$jsonFormatter;
     }
 }
