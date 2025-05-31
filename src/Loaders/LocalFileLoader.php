@@ -22,7 +22,7 @@ class LocalFileLoader implements LoaderInterface
 
         if (!file_exists($data)) {
             throw new RuntimeException(
-                sprintf(
+                \sprintf(
                     'The file %s does not exist or can not be found.',
                     $data,
                 ),

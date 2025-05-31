@@ -47,7 +47,7 @@ final class ObjectNormalizer extends AbstractClassNormalizer
 
         if (count($context->getJsonPropertyAttributes()) > 1) {
             throw new JsonSerializableException(
-                sprintf(
+                \sprintf(
                     'Must have only 1 %s Attribute.',
                     JsonProperty::class,
                 ),
@@ -56,7 +56,7 @@ final class ObjectNormalizer extends AbstractClassNormalizer
 
         if (false === $context->getReflectionItem()->isInitialized($context->getOriginalObject())) {
             throw new JsonSerializableException(
-                sprintf(
+                \sprintf(
                     'Value not initialized: %s',
                     $context->getPropertyName(),
                 ),

@@ -18,7 +18,7 @@ class UrlLoader implements LoaderInterface
     {
         if (!filter_var($data, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException(
-                sprintf('The provided URL "%s" is not valid.', $data),
+                \sprintf('The provided URL "%s" is not valid.', $data),
             );
         }
 
@@ -31,7 +31,7 @@ class UrlLoader implements LoaderInterface
         $content = @file_get_contents($data);
         if (false === $content) {
             throw new RuntimeException(
-                sprintf(
+                \sprintf(
                     'Failed to load content from URL "%s". The file may not exist or is not accessible.',
                     $data,
                 ),

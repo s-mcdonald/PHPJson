@@ -54,7 +54,7 @@ class JsonValidator implements JsonValidatorInterface
 
     private function getDefaultJsonErrorMessage(): string
     {
-        return sprintf(
+        return \sprintf(
             'The following decoding error was encountered: `%s`',
             json_last_error_msg(),
         );
