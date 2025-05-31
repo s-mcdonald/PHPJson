@@ -18,7 +18,7 @@ final class ArrayType extends JsonType
         return ['array', 'object'];
     }
 
-    final protected function cast($value): array
+    protected function cast($value): array
     {
         return (array) $value;
     }

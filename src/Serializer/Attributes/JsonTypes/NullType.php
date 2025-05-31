@@ -18,7 +18,7 @@ final class NullType extends JsonType
         return ['NULL', 'boolean'];
     }
 
-    final protected function cast($value): null
+    protected function cast($value): null
     {
         return null;
     }

@@ -18,7 +18,7 @@ final class DoubleType extends JsonType
         return ['double', 'integer', 'string', 'boolean'];
     }
 
-    final protected function cast($value): float
+    protected function cast($value): float
     {
         return (float) $value;
     }
