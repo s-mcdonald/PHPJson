@@ -14,7 +14,6 @@ use SamMcDonald\Json\JsonBuilder;
 use SamMcDonald\Json\JsonFormat;
 use SamMcDonald\Json\Serializer\Attributes\JsonProperty;
 use SamMcDonald\Json\Serializer\Exceptions\JsonSerializableException;
-use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
 use SamMcDonald\Json\Serializer\JsonSerializer;
 use SamMcDonald\Json\Tests\Fixtures\Entities\ClassWithMethodAndConstructor;
 use SamMcDonald\Json\Tests\Fixtures\Entities\ClassWithPrivateStringProperty;
@@ -33,7 +32,6 @@ use SamMcDonald\Json\Tests\Fixtures\Enums\MyEnum;
 #[UsesClass(GoodChildObjectSerializable::class)]
 #[UsesClass(JsonSerializer::class)]
 #[UsesClass(JsonBuilder::class)]
-#[UsesClass(JsonFormatter::class)]
 
 class JsonTest extends TestCase
 {
