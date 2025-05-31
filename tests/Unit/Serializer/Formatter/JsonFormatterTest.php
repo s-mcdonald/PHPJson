@@ -15,9 +15,9 @@ class JsonFormatterTest extends TestCase
     {
         $sut = new JsonFormatter();
 
-        $jsonUgly = '{"name":"bar"}';
+        $input = '{"name":"bar"}';
 
-        $jsonPretty = <<<JSON
+        $expected = <<<JSON
 {
     "name": "bar"
 }
@@ -25,8 +25,8 @@ JSON
         ;
 
         static::assertEquals(
-            $jsonPretty,
-            $sut->pretty($jsonUgly),
+            $expected,
+            $sut->pretty($input),
         );
     }
 

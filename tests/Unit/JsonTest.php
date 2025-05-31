@@ -545,7 +545,7 @@ JSON
     #[DataProvider('provideDataForTestPush')]
     public function testPush(string $json, string $expected): void
     {
-        static::assertEquals($expected, Json::push($json, "foo", "foovalue"));
+        static::assertEquals($expected, Json::push($json, "newKey", "newValue"));
     }
 
     public static function provideDataForTestPush(): \Generator
@@ -563,7 +563,7 @@ JSON
 
 
         yield
-        'json1' => [
+        'json2' => [
             '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}',
             <<<JSON
 {
@@ -578,7 +578,7 @@ JSON
             "name": "child2"
         }
     ],
-    "foo": "foovalue"
+    "newKey": "newValue"
 }
 JSON,
         ];
