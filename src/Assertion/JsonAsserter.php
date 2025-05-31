@@ -33,7 +33,7 @@ class JsonAsserter extends AbstractJsonAsserter
     {
         self::assertStringIsValidJson($json);
 
-        if (!array_key_exists($property, Json::toArray($json))) {
+        if (!array_key_exists($property, Json::convertToArray($json))) {
             static::throwInvalidArgument(
                 $message ?? 'Property does not exist on the json value.',
             );
@@ -48,7 +48,7 @@ class JsonAsserter extends AbstractJsonAsserter
         self::assertStringIsValidJson($json);
         self::assertJsonHasProperty($json, $property);
 
-        $array = Json::toArray($json);
+        $array = Json::convertToArray($json);
         if (!array_key_exists($property, $array)) {
             static::throwInvalidArgument(
                 $message ?? "Can not proceed to assert that property '{$property}' exists on the json value.",

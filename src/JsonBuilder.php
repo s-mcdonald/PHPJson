@@ -44,7 +44,7 @@ final class JsonBuilder
         }
 
         $builder = new self($serializer);
-        foreach (Json::toArray($json) as $prop => $value) {
+        foreach (Json::convertToArray($json) as $prop => $value) {
             $builder->addProperty($prop, $value);
         }
 

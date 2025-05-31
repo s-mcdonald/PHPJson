@@ -66,23 +66,4 @@ JSON
             (new JsonUtilities())->remove($json, 'key'),
         );
     }
-
-    public function testToArray(): void
-    {
-        $json = '{"key":"value","arr":[1,2,3]}';
-
-        static::assertEquals(
-            ['key' => 'value', 'arr' => [1, 2, 3]],
-            (new JsonUtilities())->toArray($json),
-        );
-    }
-
-    public function testToArrayWithInvalid(): void
-    {
-        $json = '{"key":value"}';
-
-        static::assertFalse(
-            (new JsonUtilities())->toArray($json),
-        );
-    }
 }

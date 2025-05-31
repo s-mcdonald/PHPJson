@@ -41,14 +41,4 @@ class JsonUtilities
 
         return $package->getBody();
     }
-
-    public function toArray(string $json): array|false
-    {
-        $package = (new JsonToArrayDecoder())->decode($json);
-        if ($package->isValid()) {
-            return $package->getBody();
-        }
-
-        return false;
-    }
 }

@@ -27,7 +27,7 @@ final class Json
 
     private function __construct(string $json)
     {
-        $this->jsonProperties = self::toArray($json);
+        $this->jsonProperties = self::convertToArray($json);
     }
 
     public function toPretty(): string
@@ -104,9 +104,19 @@ final class Json
         return self::getJsonUtilities()->remove($json, $property);
     }
 
-    public static function toArray(string $json): array|false
+    public function toArray(): array|false
     {
-        return self::getJsonUtilities()->toArray($json);
+        return $this->jsonProperties;
+    }
+
+    public static function convertToArray(string $json): array|false
+    {
+        $package = (new JsonToArrayDecoder())->decode($json);
+        if ($package->isValid()) {
+            return $package->getBody();
+        }
+
+        return false;
     }
 
     public static function validate(string $json): bool

@@ -500,7 +500,26 @@ JSON
     {
         $json = '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}';
 
-        $array = Json::toArray($json);
+        $jsonObj = Json::createFromString($json);
+
+        $array = $jsonObj->toArray();
+
+        static::assertIsArray($array);
+        static::assertCount(4, $array);
+        static::assertEquals('bar', $array['name']);
+        static::assertEquals(19, $array['age']);
+        static::assertTrue($array['isActive']);
+        static::assertIsArray($array['children']);
+        static::assertCount(2, $array['children']);
+        static::assertEquals('child1', $array['children'][0]['name']);
+        static::assertEquals('child2', $array['children'][1]['name']);
+    }
+
+    public function testConvertToArray(): void
+    {
+        $json = '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}]}';
+
+        $array = Json::convertToArray($json);
 
         static::assertIsArray($array);
         static::assertCount(4, $array);
@@ -516,10 +535,10 @@ JSON
     /**
      * With malformed json string, false is expected to be returned
      */
-    public function testToArrayWithBadJson(): void
+    public function testConvertToArrayWithBadJson(): void
     {
         $json = '{"name":"bar","age":19, "isActive":true, "children": [{"name":"child1"},{"name":"child2"}';
-        $array = Json::toArray($json);
+        $array = Json::convertToArray($json);
         static::assertFalse($array);
     }
 
