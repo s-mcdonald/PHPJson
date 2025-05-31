@@ -6,6 +6,7 @@ namespace SamMcDonald\Json\Loaders;
 
 use InvalidArgumentException;
 use RuntimeException;
+use SamMcDonald\Json\Loaders\Contracts\LoaderInterface;
 
 class LocalFileLoader implements LoaderInterface
 {
