@@ -601,6 +601,22 @@ JSON;
         );
     }
 
+    public function testToUgly(): void
+    {
+        $json = "{
+    \"key\": \"value\"
+}";
+
+        $expected = '{"key":"value"}';
+
+        $json = Json::createFromString($json);
+
+        static::assertEquals(
+            $expected,
+            $json->toUgly(),
+        );
+    }
+
     public function testValidate(): void
     {
         $jsonBad = '{"foo":"bar","num":123,double:123.567}';

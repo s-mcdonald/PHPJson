@@ -11,19 +11,6 @@ use SamMcDonald\Json\Serializer\Transformer\JsonUtilities;
 #[CoversClass(JsonUtilities::class)]
 class JsonUtilitiesTest extends TestCase
 {
-    public function testUglify(): void
-    {
-        $json = "{
-    \"key\": \"value\"
-}";
-        $uglyJson = '{"key":"value"}';
-
-        static::assertEquals(
-            $uglyJson,
-            (new JsonUtilities())->uglify($json)
-        );
-    }
-
     public function testIsValidWithTrue(): void
     {
         $json = '{"key":"value"}';

@@ -13,11 +13,6 @@ use SamMcDonald\Json\Serializer\Formatter\JsonFormatter;
  */
 class JsonUtilities
 {
-    public function uglify(string $json): string
-    {
-        return (new JsonFormatter())->ugly($json);
-    }
-
     public function isValid(string $json): bool
     {
         return (new JsonToArrayDecoder())->decode($json)->isValid();
